@@ -33,7 +33,7 @@ if project_root not in sys.path:
 
 # Inicializar Firebase con el bucket correcto
 cred = credentials.Certificate("config/firebase-credentials.json")
-firebase_admin.initialize_app(cred, {"storageBucket": "proyecto-mnist-dashboard.appspot.com"})
+firebase_admin.initialize_app(cred, {"storageBucket": "proyecto-mnist-dashboard.firebasestorage.app"})
 
 def iniciar_interfaz():
     # Crear la ventana principal
