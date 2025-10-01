@@ -85,9 +85,11 @@ def subir_a_firebase(ruta_imagen, digito):
     timestamp = time.strftime("%Y%m%d_%H%M")
     nombre_archivo = f"digito_{digito}_{timestamp}.png"
     print(f"Subiendo {ruta_imagen} como {nombre_archivo} a Firebase Storage...")
-    bucket = storage.bucket()
+    bucket = storage.bucket(name="proyecto-mnist-dashboard.firebasestorage.app")
     blob = bucket.blob(nombre_archivo)
     blob.upload_from_filename(ruta_imagen)
+    # Hacer el objeto público
+    blob.make_public()
     url = blob.public_url
     print(f"URL generada: {url}")
     return url
