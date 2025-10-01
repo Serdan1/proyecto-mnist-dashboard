@@ -53,3 +53,10 @@ def crear_modelo():
         tf.keras.layers.Dense(10, activation='softmax')
     ])
     return model
+
+def compilar_modelo(model):
+    # Compilar el modelo con optimizador, pérdida y métricas
+    model.compile(optimizer='adam',
+                  loss='categorical_crossentropy',
+                  metrics=['accuracy'])
+    return model
