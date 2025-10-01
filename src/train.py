@@ -89,3 +89,9 @@ def entrenar_modelo(model, X_train, y_train, X_test, y_test):
     plt.show()
     
     return history
+
+def guardar_modelo(model):
+    # Guardar el modelo entrenado en la carpeta 'models/'
+    model.save('models/modelo_digitos.h5')
+    print("Modelo guardado como models/modelo_digitos.h5")
+
