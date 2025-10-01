@@ -5,6 +5,8 @@
 import unittest
 import sys
 import os
+from PIL import Image
+import numpy as np
 
 # Ajustar el path al inicio para incluir la raíz del proyecto
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -26,10 +28,14 @@ class TestPredictFunctions(unittest.TestCase):
         # Prueba que preprocesar_imagen() devuelva un array con forma correcta
         img_array = preprocesar_imagen(self.ruta_imagen)
         self.assertEqual(img_array.shape, (1, 28, 28, 1))  # Forma esperada para la CNN
+        # Guardar la imagen procesada para inspección, eliminando el canal
+        processed_img = Image.fromarray((img_array[0, :, :, 0] * 255).astype(np.uint8), mode='L')
+        processed_img.save('images/procesada_digito_1.png')
 
     def test_predecir_digito(self):
         # Prueba que predecir_digito() devuelva un dígito y probabilidades
         digito, probabilidades = predecir_digito(self.ruta_imagen)
+        print(f"Dígito predicho: {digito}")  # Imprimir el dígito para verificar
         self.assertIsInstance(digito, int)  # Verifica que el dígito sea un entero
         self.assertEqual(len(probabilidades), 10)  # 10 probabilidades para cada clase
 
