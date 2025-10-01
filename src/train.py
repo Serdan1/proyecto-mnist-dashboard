@@ -60,3 +60,32 @@ def compilar_modelo(model):
                   loss='categorical_crossentropy',
                   metrics=['accuracy'])
     return model
+
+def entrenar_modelo(model, X_train, y_train, X_test, y_test):
+    # Entrenar el modelo con los datos
+    history = model.fit(X_train, y_train,
+                        epochs=3,
+                        batch_size=1000,
+                        validation_data=(X_test, y_test))
+    
+    # Mostrar curvas de pérdida y precisión
+    import matplotlib.pyplot as plt
+    plt.figure(figsize=(12, 6))
+    plt.subplot(1, 2, 1)
+    plt.plot(history.history['loss'], label='Train Loss')
+    plt.plot(history.history['val_loss'], label='Val Loss')
+    plt.title('Pérdida (Loss)')
+    plt.xlabel('Épocas')
+    plt.ylabel('Loss')
+    plt.legend()
+    
+    plt.subplot(1, 2, 2)
+    plt.plot(history.history['accuracy'], label='Train Acc')
+    plt.plot(history.history['val_accuracy'], label='Val Acc')
+    plt.title('Precisión (Accuracy)')
+    plt.xlabel('Épocas')
+    plt.ylabel('Accuracy')
+    plt.legend()
+    plt.show()
+    
+    return history
