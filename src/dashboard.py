@@ -23,11 +23,17 @@ import tkinter as tk
 from tkinter import filedialog
 from src.predict import preprocesar_imagen, predecir_digito
 import time
+import firebase_admin
+from firebase_admin import credentials, storage
 
 # Ajustar el path al inicio con una ruta absoluta explícita
 project_root = "/workspaces/proyecto-mnist-dashboard"
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
+
+# Inicializar Firebase con el bucket correcto
+cred = credentials.Certificate("config/firebase-credentials.json")
+firebase_admin.initialize_app(cred, {"storageBucket": "proyecto-mnist-dashboard.appspot.com"})
 
 def iniciar_interfaz():
     # Crear la ventana principal
@@ -75,15 +81,16 @@ def mostrar_resultado(digito, probabilidades):
     # Nota: Esto se integrará con la etiqueta 'resultado' en iniciar_interfaz() en un entorno con GUI
 
 def subir_a_firebase(ruta_imagen, digito):
-    # Subir la imagen a Firebase Storage (placeholder)
+    # Subir la imagen a Firebase Storage
     timestamp = time.strftime("%Y%m%d_%H%M")
     nombre_archivo = f"digito_{digito}_{timestamp}.png"
     print(f"Subiendo {ruta_imagen} como {nombre_archivo} a Firebase Storage...")
-    # Placeholder: Aquí se integraría la lógica de Firebase (credenciales, subida, URL)
-    # Devuelve URL simulada por ahora
-    url_simulada = f"https://firebasestorage.googleapis.com/v0/b/mi-proyecto.appspot.com/o/{nombre_archivo}?alt=media"
-    print(f"URL generada: {url_simulada}")
-    return url_simulada
+    bucket = storage.bucket()
+    blob = bucket.blob(nombre_archivo)
+    blob.upload_from_filename(ruta_imagen)
+    url = blob.public_url
+    print(f"URL generada: {url}")
+    return url
 
 if __name__ == "__main__":
     print("Interfaz gráfica deshabilitada en Codespaces. Usa un entorno con GUI para ejecutarla.")
