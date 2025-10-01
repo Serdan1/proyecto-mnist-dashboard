@@ -4,8 +4,9 @@
 # y subida de imágenes a Firebase Storage. Llamará a funciones y clases definidas en otros
 # archivos (src/train.py, src/predict.py, src/dashboard.py, etc.).
 
+import numpy as np
 from src.train import cargar_datos, crear_modelo, compilar_modelo, entrenar_modelo, guardar_modelo
-from src.predict import predecir_digito
+from src.predict import predecir_digito, validar_prediccion
 
 def main():
     # Entrenamiento (opcional, si el modelo no existe)
@@ -19,7 +20,8 @@ def main():
     # Predicción con una imagen de prueba
     ruta_imagen = 'images/images_digito_1.png'
     digito, probabilidades = predecir_digito(ruta_imagen)
-    print(f"Predicción: Dígito = {digito}, Probabilidades = {probabilidades}")
+    confianza = probabilidades[np.argmax(probabilidades)]  # Confianza del dígito predicho
+    print(f"Predicción: Dígito = {digito}, Confianza = {confianza:.2f}, Probabilidades = {probabilidades}")
 
 if __name__ == "__main__":
     main()
