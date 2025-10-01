@@ -22,6 +22,8 @@
 import tensorflow as tf
 from tensorflow.keras.datasets import mnist
 from tensorflow.keras.utils import to_categorical
+import matplotlib.pyplot as plt
+import os
 
 def cargar_datos():
     # Cargar el dataset MNIST
@@ -69,7 +71,6 @@ def entrenar_modelo(model, X_train, y_train, X_test, y_test):
                         validation_data=(X_test, y_test))
     
     # Mostrar curvas de pérdida y precisión
-    import matplotlib.pyplot as plt
     plt.figure(figsize=(12, 6))
     plt.subplot(1, 2, 1)
     plt.plot(history.history['loss'], label='Train Loss')
@@ -92,6 +93,14 @@ def entrenar_modelo(model, X_train, y_train, X_test, y_test):
 
 def guardar_modelo(model):
     # Guardar el modelo entrenado en la carpeta 'models/'
+    os.makedirs('models', exist_ok=True)  # Crear carpeta si no existe
     model.save('models/modelo_digitos.h5')
     print("Modelo guardado como models/modelo_digitos.h5")
 
+if __name__ == '__main__':
+    # Ejecutar el flujo completo
+    X_train, y_train, X_test, y_test = cargar_datos()
+    model = crear_modelo()
+    model = compilar_modelo(model)
+    history = entrenar_modelo(model, X_train, y_train, X_test, y_test)
+    guardar_modelo(model)
