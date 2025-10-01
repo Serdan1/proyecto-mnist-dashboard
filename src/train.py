@@ -1,7 +1,8 @@
 # train.py
 # Este script será usado para entrenar una Red Neuronal Convolucional (CNN) con el dataset MNIST
 # para reconocer dígitos manuscritos (0-9). Utilizará TensorFlow/Keras y guardará el modelo
-# en la carpeta 'models/' como modelo_digitos.h5. 
+# en la carpeta 'models/' como modelo_digitos.h5. Basado en los apuntes de clase (Temario.pdf,
+# páginas 9-17).
 
 # Planificación de funciones y flujo:
 # 1. cargar_datos(): Carga el dataset MNIST y lo divide en entrenamiento y prueba.
@@ -17,3 +18,25 @@
 #    - Muestra curvas de pérdida (loss) y precisión (accuracy) con matplotlib.
 # 5. guardar_modelo(): Guarda el modelo entrenado en 'models/modelo_digitos.h5'.
 #    - Verifica que se guarde correctamente.
+
+import tensorflow as tf
+from tensorflow.keras.datasets import mnist
+from tensorflow.keras.utils import to_categorical
+
+def cargar_datos():
+    # Cargar el dataset MNIST
+    (X_train, y_train), (X_test, y_test) = mnist.load_data()
+    
+    # Normalizar píxeles (0-255 a 0-1)
+    X_train = X_train.astype('float32') / 255.0
+    X_test = X_test.astype('float32') / 255.0
+    
+    # Reshape a (muestras, 28, 28, 1) para CNN
+    X_train = X_train.reshape(-1, 28, 28, 1)
+    X_test = X_test.reshape(-1, 28, 28, 1)
+    
+    # Convertir etiquetas a one-hot encoding (10 clases)
+    y_train = to_categorical(y_train, 10)
+    y_test = to_categorical(y_test, 10)
+    
+    return X_train, y_train, X_test, y_test
