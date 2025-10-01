@@ -1,0 +1,6 @@
+tensorflow
+pillow
+firebase-admin
+numpy
+matplotlib
+tkinter
