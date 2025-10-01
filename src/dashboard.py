@@ -61,7 +61,7 @@ def iniciar_interfaz():
     # ventana.mainloop()
 
 def manejar_drop(ruta_imagen):
-    # Procesar el evento de soltar una imagen
+    # Procesar el evento de soltar una imagen y devolver resultados
     try:
         # Preprocesar la imagen
         img_array = preprocesar_imagen(ruta_imagen)
@@ -69,10 +69,10 @@ def manejar_drop(ruta_imagen):
         # Predecir el dígito
         digito, probabilidades = predecir_digito(ruta_imagen)
         print(f"Predicción para {ruta_imagen}: Dígito = {digito}, Probabilidades = {probabilidades}")
-        mostrar_resultado(digito, probabilidades)
-        subir_a_firebase(ruta_imagen, digito)  # Llamar a subir_a_firebase
+        return digito, probabilidades  # Devolver los valores para la orquestación
     except Exception as e:
         print(f"Error al procesar la imagen {ruta_imagen}: {e}")
+        return None, None  # Devolver None en caso de error
 
 def mostrar_resultado(digito, probabilidades):
     # Preparar la salida para la interfaz (placeholder)
