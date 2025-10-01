@@ -51,7 +51,7 @@ def predecir_digito(ruta_imagen):
     
     # Predecir el dígito
     prediccion = model.predict(img_array)
-    digito = np.argmax(prediccion)
+    digito = int(np.argmax(prediccion))  # Convertir a int de Python
     probabilidades = prediccion[0]  # Probabilidades de cada clase (0-9)
     
     return digito, probabilidades
