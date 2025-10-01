@@ -71,8 +71,12 @@ def predecir_digito(ruta_imagen):
     digito = int(np.argmax(prediccion))  # Convertir a int de Python
     probabilidades = prediccion[0]  # Probabilidades de cada clase (0-9)
     
-    # Validar la confianza de la predicción
-    validar_prediccion(probabilidades)
+    # Validar la confianza de la predicción con manejo de error
+    try:
+        validar_prediccion(probabilidades)
+    except ValueError as e:
+        print(f"Advertencia: {e}. Devolviendo -1 como dígito por defecto.")
+        digito = -1
     
     return digito, probabilidades
 
