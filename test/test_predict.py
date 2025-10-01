@@ -12,6 +12,10 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from src.predict import cargar_modelo, preprocesar_imagen, predecir_digito
 
 class TestPredictFunctions(unittest.TestCase):
+    def setUp(self):
+        # Definir la ruta de la imagen de prueba
+        self.ruta_imagen = 'images/images_digito_1.png'
+
     def test_cargar_modelo(self):
         # Prueba que cargar_modelo() devuelva un modelo válido
         model = cargar_modelo()
@@ -20,13 +24,14 @@ class TestPredictFunctions(unittest.TestCase):
 
     def test_preprocesar_imagen(self):
         # Prueba que preprocesar_imagen() devuelva un array con forma correcta
-        # Usar una imagen de prueba (pendiente de crear)
-        pass  # Placeholder hasta que tengamos una imagen
+        img_array = preprocesar_imagen(self.ruta_imagen)
+        self.assertEqual(img_array.shape, (1, 28, 28, 1))  # Forma esperada para la CNN
 
     def test_predecir_digito(self):
         # Prueba que predecir_digito() devuelva un dígito y probabilidades
-        # Usar una imagen de prueba (pendiente de crear)
-        pass  # Placeholder hasta que tengamos una imagen y modelo
+        digito, probabilidades = predecir_digito(self.ruta_imagen)
+        self.assertIsInstance(digito, int)  # Verifica que el dígito sea un entero
+        self.assertEqual(len(probabilidades), 10)  # 10 probabilidades para cada clase
 
 if __name__ == '__main__':
     unittest.main()
