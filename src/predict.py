@@ -31,6 +31,23 @@ def preprocesar_imagen(ruta_imagen):
     # Cargar la imagen desde la ruta
     img = Image.open(ruta_imagen).convert('L')  # Convertir a escala de grises
     
+    # Convertir a array para análisis
+    img_array = np.array(img)
+    
+    # Encontrar el recorte basado en el contenido (asumiendo fondo negro)
+    coords = np.where(img_array < 255)  # Píxeles no blancos (dígito)
+    if len(coords[0]) > 0:  # Si hay píxeles del dígito
+        y_min, y_max = coords[0].min(), coords[0].max()
+        x_min, x_max = coords[1].min(), coords[1].max()
+        # Añadir un margen pequeño
+        margin = 2
+        y_min = max(0, y_min - margin)
+        y_max = min(img_array.shape[0], y_max + margin)
+        x_min = max(0, x_min - margin)
+        x_max = min(img_array.shape[1], x_max + margin)
+        # Recortar la imagen
+        img = img.crop((x_min, y_min, x_max, y_max))
+    
     # Redimensionar a 28x28 píxeles
     img = img.resize((28, 28), Image.Resampling.LANCZOS)
     
@@ -55,3 +72,11 @@ def predecir_digito(ruta_imagen):
     probabilidades = prediccion[0]  # Probabilidades de cada clase (0-9)
     
     return digito, probabilidades
+
+def validar_prediccion(probabilidades, umbral=0.8):
+    # Validar que la probabilidad del dígito predicho supere el umbral
+    digito_predicho = np.argmax(probabilidades)
+    confianza = probabilidades[digito_predicho]
+    if confianza < umbral:
+        raise ValueError(f"Confianza insuficiente: {confianza:.2f} < {umbral}. Predicción poco fiable.")
+    return True
