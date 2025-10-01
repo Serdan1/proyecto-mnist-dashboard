@@ -3,6 +3,12 @@
 # Probará el flujo completo de entrenamiento de la CNN con MNIST.
 
 import unittest
+import sys
+import os
+
+# Ajustar el path al inicio para incluir la raíz del proyecto
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from src.train import cargar_datos, crear_modelo, compilar_modelo, entrenar_modelo, guardar_modelo
 
 class TestTrainFunctions(unittest.TestCase):
