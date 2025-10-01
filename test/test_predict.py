@@ -28,8 +28,9 @@ class TestPredictFunctions(unittest.TestCase):
         # Prueba que preprocesar_imagen() devuelva un array con forma correcta
         img_array = preprocesar_imagen(self.ruta_imagen)
         self.assertEqual(img_array.shape, (1, 28, 28, 1))  # Forma esperada para la CNN
-        # Guardar la imagen procesada para inspección, eliminando el canal
-        processed_img = Image.fromarray((img_array[0, :, :, 0] * 255).astype(np.uint8), mode='L')
+        # Guardar la imagen procesada para inspección
+        processed_data = (img_array[0, :, :, 0] * 255).clip(0, 255).astype(np.uint8)
+        processed_img = Image.fromarray(processed_data, mode='L')
         processed_img.save('images/procesada_digito_1.png')
 
     def test_predecir_digito(self):
