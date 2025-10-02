@@ -6,8 +6,30 @@
 
 from src.train import cargar_datos, crear_modelo, compilar_modelo, entrenar_modelo, guardar_modelo
 from src.dashboard import manejar_drop, mostrar_resultado, subir_a_firebase
+import pyrebase
+
+# Configuración de Firebase
+firebase_config = {
+    "apiKey": "AIzaSyD7YY310OaD35O9SS_4kvlL6NPW_xkzru0",  # Corregida con el formato correcto
+    "authDomain": "proyecto-mnist-dashboard.firebasestorage.app",
+    "databaseURL": "",
+    "storageBucket": "proyecto-mnist-dashboard.firebasestorage.app",
+    "serviceAccount": "config/firebase-credentials.json"
+}
+
+# Inicializar Firebase
+firebase = pyrebase.initialize_app(firebase_config)
+auth = firebase.auth()
 
 def main():
+    # Autenticación con las nuevas credenciales
+    try:
+        user = auth.sign_in_with_email_and_password("danielserranomartin1@gmail.com", "Contraseña123")
+        print("Autenticación exitosa.")
+    except Exception as e:
+        print(f"Error de autenticación: {e}")
+        return
+
     # Entrenamiento (opcional, si el modelo no existe)
     try:
         X_train, y_train, X_test, y_test = cargar_datos()
