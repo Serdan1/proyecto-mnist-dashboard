@@ -3,3 +3,4 @@ pillow
 firebase-admin
 numpy
 matplotlib
+tkinterdnd2
