@@ -101,5 +101,32 @@ Este proyecto implementa una aplicación de reconocimiento de dígitos manuscrit
 - La depuración con `print()` en la consola indica cada etapa (inicialización, predicción, subida).
 - El umbral de confianza (0.2) es ajustable en `procesar_imagen()` para tolerar imágenes ruidosas.
 
+## Estructura del Proyecto
+- `main.py`: Punto de entrada para entrenar el modelo y orquestar la predicción.
+- `src/`:
+  - `dashboard.py`: Lógica de la interfaz gráfica con Tkinter y drag-and-drop.
+  - `predict.py`: Funciones para preprocesar imágenes y predecir dígitos con la CNN.
+  - `train.py`: Entrenamiento de la CNN usando MNIST.
+- `config/`: Almacena `firebase-credentials.json` para autenticación.
+- `images/`: Incluye ejemplos como `images_digito_1.png` y `im2.png`.
+- `models/`: Contiene el modelo entrenado (`modelo_digitos.h5`).
+- `test/`: Archivos de prueba (p. ej., `test_predict.py`).
 
+
+
+## Diagrama del Funcionamiento del Sistema
+```mermaid
+graph TD
+    A[Usuario] -->|Arrastra o carga imagen| B(Interfaz Gráfica<br>dashboard.py)
+    B --> C{Validar imagen}
+    C -->|Sí| D[Preprocesamiento<br>predict.py]
+    C -->|No| E[Mostrar error]
+    D --> F[Predicción con CNN<br>predict.py]
+    F --> G{Confianza >= 0.2?}
+    G -->|Sí| H[Subir a Firebase<br>dashboard.py]
+    G -->|No| I[Mostrar "Confianza insuficiente"]
+    H --> J[Mostrar resultado y URL]
+    J --> A
+    E --> A
+    I --> A
 
