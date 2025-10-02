@@ -120,7 +120,7 @@ graph TD
     A[Usuario] -->|Arrastra o carga imagen| B(Interfaz Gráfica<br>dashboard.py)
     B --> C{Validar imagen}
     C -->|Sí| D[Preprocesamiento<br>predict.py]
-    C -->|No| E[Mostrar error]
+    C -->|No| E[Mostrar error en la interfaz]
     D --> F[Predicción con CNN<br>predict.py]
     F --> G{Confianza >= 0.2?}
     G -->|Sí| H[Subir a Firebase<br>dashboard.py]
@@ -129,4 +129,3 @@ graph TD
     J --> A
     E --> A
     I --> A
-
