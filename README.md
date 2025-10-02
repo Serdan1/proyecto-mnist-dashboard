@@ -1,7 +1,7 @@
 # Proyecto MNIST Dashboard
 
 ## Descripción
-Este proyecto implementa una aplicación de reconocimiento de dígitos manuscritos utilizando una Red Neuronal Convolucional (CNN) entrenada con el dataset MNIST. La aplicación permite cargar o arrastrar imágenes de dígitos dibujados (por ejemplo, en Paint), predecir el número mediante un modelo de TensorFlow/Keras, y subir las imágenes a Firebase Storage con una URL pública. La interfaz gráfica está desarrollada con Tkinter, extendida con `tkinterdnd2` para soportar drag-and-drop. Este proyecto sigue las guías del temario de clase (páginas 9-17), que cubren la construcción de CNN, el dataset MNIST, backpropagation, funciones de activación (ReLU, softmax), y técnicas para manejar overfitting (dropout, regularización).
+Este proyecto implementa una aplicación de reconocimiento de dígitos manuscritos utilizando una Red Neuronal Convolucional (CNN) entrenada con el dataset MNIST. La aplicación permite cargar o arrastrar imágenes de dígitos dibujados (por ejemplo, en Paint), predecir el número mediante un modelo de TensorFlow/Keras, y subir las imágenes a Firebase Storage con una URL pública. La interfaz gráfica está desarrollada con Tkinter, extendida con `tkinterdnd2` para soportar drag-and-drop. 
 
 ## Características
 - Predicción de dígitos manuscritos con una CNN entrenada (precisión de validación ~97.45% con 3 épocas).
@@ -116,16 +116,16 @@ Este proyecto implementa una aplicación de reconocimiento de dígitos manuscrit
 
 ## Diagrama del Funcionamiento del Sistema
 ```mermaid
-graph TD
-    A[Usuario] -->|Arrastra o carga imagen| B(Interfaz Gráfica<br>dashboard.py)
+graph LR
+    A[Usuario] --> B(Interfaz Gráfica)
     B --> C{Validar imagen}
-    C -->|Sí| D[Preprocesamiento<br>predict.py]
-    C -->|No| E[Mostrar error en la interfaz]
-    D --> F[Predicción con CNN<br>predict.py]
-    F --> G{Confianza >= 0.2?}
-    G -->|Sí| H[Subir a Firebase<br>dashboard.py]
-    G -->|No| I[Mostrar "Confianza insuficiente"]
-    H --> J[Mostrar resultado y URL]
-    J --> A
+    C -->|Sí| D[Preprocesar<br>predict.py]
+    C -->|No| E[Error]
+    D --> F[Predecir<br>predict.py]
+    F --> G{Confianza > 0.2?}
+    G -->|Sí| H[Subir a Firebase]
+    G -->|No| I[Baja confianza]
+    H --> J[Mostrar resultado]
     E --> A
     I --> A
+    J --> A
