@@ -22,3 +22,11 @@ Este proyecto es un sistema para reconocer dígitos dibujados y subirlos a Fireb
 
 ## Notas
 - Las reglas de Firebase Storage están configuradas como públicas (`if true`) para pruebas. Ajusta a `if request.auth != null` para seguridad.
+
+## Pruebas Locales
+Para probar la interfaz gráfica en tu máquina local, sigue estos pasos:
+1. Clona el repositorio: `git clone https://github.com/Serdan1/proyecto-mnist-dashboard.git`
+2. Instala dependencias: `pip install tensorflow keras firebase-admin numpy pillow tkinter`
+3. Configura Firebase: Descarga el archivo de credenciales y guárdalo como config/firebase-credentials.json.
+4. Ejecuta: `python -m src.dashboard`
+5. Usa drag-and-drop o el botón "Cargar Imagen" para procesar imágenes.
