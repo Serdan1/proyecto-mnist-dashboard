@@ -20,7 +20,7 @@
 import sys
 import os
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from src.predict import preprocesar_imagen, predecir_digito
 import time
 import firebase_admin
@@ -45,20 +45,43 @@ def iniciar_interfaz():
     instruccion = tk.Label(ventana, text="Arrastra una imagen o usa el botón para cargarla")
     instruccion.pack(pady=10)
 
-    # Área para soltar imágenes (placeholder)
+    # Área para soltar imágenes con soporte básico
     area_drop = tk.Label(ventana, text="Suelta la imagen aquí", bg="lightgray", width=40, height=15)
     area_drop.pack(pady=20)
 
-    # Botón para cargar imagen (placeholder)
-    boton_cargar = tk.Button(ventana, text="Cargar Imagen", command=lambda: filedialog.askopenfilename())
+    # Función para simular drag-and-drop (placeholder en Codespaces)
+    def on_drop(event):
+        if event.data:
+            ruta_imagen = event.data
+            procesar_imagen(ruta_imagen, area_drop)
+
+    # Simulación de drop (en Codespaces, usaremos filedialog como alternativa)
+    def procesar_imagen(ruta_imagen, area):
+        try:
+            digito, probabilidades = manejar_drop(ruta_imagen)
+            mostrar_resultado(digito, probabilidades, area)
+            url = subir_a_firebase(ruta_imagen, digito)
+            mostrar_resultado_url(url, area)
+        except Exception as e:
+            messagebox.showerror("Error", f"Error al procesar: {e}")
+
+    # Botón para cargar imagen
+    boton_cargar = tk.Button(ventana, text="Cargar Imagen", command=lambda: cargar_imagen(area_drop))
     boton_cargar.pack(pady=10)
 
-    # Etiqueta para resultados (placeholder)
+    # Etiqueta para resultados
     resultado = tk.Label(ventana, text="Resultado: -")
     resultado.pack(pady=10)
 
-    # Nota: La ventana no se ejecuta en Codespaces; usar en entorno con GUI
+    # Ejecutar la ventana (deshabilitado en Codespaces por ahora)
     # ventana.mainloop()
+
+    return ventana  # Devolver la ventana para uso externo si es necesario
+
+def cargar_imagen(area):
+    ruta_imagen = filedialog.askopenfilename(filetypes=[("Image files", "*.png *.jpg *.jpeg")])
+    if ruta_imagen:
+        procesar_imagen(ruta_imagen, area)
 
 def manejar_drop(ruta_imagen):
     # Procesar el evento de soltar una imagen y devolver resultados
@@ -74,25 +97,24 @@ def manejar_drop(ruta_imagen):
         print(f"Error al procesar la imagen {ruta_imagen}: {e}")
         return None, None  # Devolver None en caso de error
 
-def mostrar_resultado(digito, probabilidades):
-    # Preparar la salida para la interfaz (placeholder)
-    resultado_texto = f"Número: {digito}, Probabilidades: {probabilidades}"
-    print(f"Resultado preparado: {resultado_texto}")  # Simulación de salida en consola
-    # Nota: Esto se integrará con la etiqueta 'resultado' en iniciar_interfaz() en un entorno con GUI
+def mostrar_resultado(digito, probabilidades, area):
+    # Actualizar la interfaz con el dígito predicho
+    if digito is not None and probabilidades is not None:
+        resultado_texto = f"Número: {digito}, Confianza: {np.max(probabilidades):.2f}"
+        area.config(text=resultado_texto)
+        print(f"Resultado preparado: {resultado_texto}")
+    else:
+        area.config(text="Error en la predicción")
 
-def subir_a_firebase(ruta_imagen, digito):
-    # Subir la imagen a Firebase Storage
-    timestamp = time.strftime("%Y%m%d_%H%M")
-    nombre_archivo = f"digito_{digito}_{timestamp}.png"
-    print(f"Subiendo {ruta_imagen} como {nombre_archivo} a Firebase Storage...")
-    bucket = storage.bucket(name="proyecto-mnist-dashboard.firebasestorage.app")
-    blob = bucket.blob(nombre_archivo)
-    blob.upload_from_filename(ruta_imagen)
-    # Hacer el objeto público
-    blob.make_public()
-    url = blob.public_url
-    print(f"URL generada: {url}")
-    return url
+def mostrar_resultado_url(url, area):
+    # Actualizar la interfaz con la URL de Firebase
+    if url:
+        area.config(text=f"URL: {url}")
+        print(f"URL mostrada: {url}")
+    else:
+        area.config(text="Error al subir la imagen")
+
+import numpy as np  # Añadido para np.max en mostrar_resultado
 
 if __name__ == "__main__":
     print("Interfaz gráfica deshabilitada en Codespaces. Usa un entorno con GUI para ejecutarla.")
